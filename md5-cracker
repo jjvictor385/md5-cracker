@@ -1,0 +1,21 @@
+#!/usr/bin/bash
+# Date: dom 27 set 2020 08:20:29 -03
+# Created by john
+function crack(){
+	for line in $(cat $1); do
+		for word in $(cat $2); do
+			hashed=$(echo -n $word | md5sum)
+			echo -e -n "\rTrying ${hashed/  -/}..."
+			if [ "${hashed/  -/}" = "$line" ]; then
+				echo -e "\nMatch found: $word"
+				return
+			fi
+		done
+		echo -e "\nNo match found for $line."
+	done
+}
+if [ -z $1 ]; then
+	echo "Usage [file_to_attack] [wordlist]"
+	exit 1
+fi
+crack "$1" "$2"
